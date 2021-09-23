@@ -13,7 +13,7 @@
   - `Flask`, `Jinja`, `flask-pagination` 
 - Cryptocurrency Market REST API service
   - `Flask`, `pydantic`, `SQLAlchemy` with `SQLite`
-- Films Evaluation REST API service
+- Films Assessment REST API service
   - `FastAPI`, `pydantic`, `SQLAlchemy`, HTTP Basic Auth
 - Image Resizer Queues REST API service
   - `FastAPI`, `Pillow`, Docker, `docker-compose`
