@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TODO</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+<div class="container">
+    <!--Header-->
+    <div class="row" style="margin: 30pt 0 10pt 0;">
+        <div class="col-sm-6">
+            <h1><b>TODO List</b></h1>
+        </div>
+    </div>
+
+    <!--Navigation: active, finished and all items-->
+    <div class="row" style="margin-bottom: 10pt;">
+        <div class="col-sm-5 btn-group" role="group" aria-label="Status">
+            <a class="btn btn-light {% if status == 'active' %} active {% endif %}" href="/active">Active</a>
+            <a class="btn btn-light {% if status == 'finished' %} active {% endif %}" href="/finished">Finished</a>
+            <a class="btn btn-light {% if status == 'all' %} active {% endif %}" href="/all">All</a>
+        </div>
+    </div>
+
+    <!--Search form-->
+    <div class="row" style="margin-bottom: 30pt;">
+        <div class="col-sm-5">
+            <form class="input-group" method="get">
+                <input class="form-control" type="search" name="filter" value=""
+                       id="example-search-input">
+                <span class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+            </form>
+        </div>
+    </div>
+
+    <!--Main body-->
+    <div class="row">
+        <div class="col-sm-5">
+            <ul id="todo_list" class="list-group">
+
+                <!--Add new task link OR Show corresponding form-->
+                {% if status == 'active' or status == 'all' %}
+                <li class="list-group-item">
+                    <form class="" action="" method="post">
+                        <div class="form-group row" style="margin-bottom: 0;">
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="new_item_desc" name="new_item_desc"
+                                       placeholder="Add new task">
+                            </div>
+                            <div class="col-sm-3 align-self-end">
+                                <input class="btn btn-primary btn-block" type="submit">
+                            </div>
+                        </div>
+                    </form>
+                </li>
+                {% endif %}
+
+                <!--Main list of TO DO items-->
+                {% for item in paginator.page_items %}
+                <li class="list-group-item">
+                    {% if not item.is_finished %}
+                    <form action="" method="post">
+                        <div class="form-group row" style="margin-bottom: 0;">
+                            <input type="hidden" name="finish_item_id" value="{{ item.id }}"/>
+                            <label class="col-sm-8 col-form-label" for="finish_{{item.id}}">{{ item.desc }}</label>
+                            <div class="col-sm-3">
+                                <input class="btn btn-outline-dark btn-block" id="finish_{{item.id}}" value="Finish"
+                                       type="submit">
+                            </div>
+                        </div>
+                    </form>
+                    {% else %}
+                    <strike>{{ item.desc }}</strike>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    </div>
+
+    <!--Simplified pagination-->
+    <div class="row" style="margin-top: 20pt;">
+        <div class="col-sm-6">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+
+                    {% for page_num in range(1, paginator.total_pages_count + 1) %}
+                    {% if page_num == paginator.page_num %}
+                    <li class="page-item active">
+                        <a class="page-link" href="{{ page_num }}">{{ page_num }}</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ page_num }}">{{ page_num }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

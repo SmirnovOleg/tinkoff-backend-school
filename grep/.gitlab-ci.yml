@@ -1,0 +1,32 @@
+image: python:3.9
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip
+    - .venv/
+
+before_script:
+  - python -V
+  - python -m venv .venv
+  - source .venv/bin/activate
+  - python -m pip install --upgrade pip
+  - python -m pip install -r requirements.txt
+
+stages:
+  - lint
+  - test
+
+lint:
+  stage: lint
+  script:
+    - flake8 --jobs 4 --statistics --show-source tests myapp setup.py
+    - pylint --jobs 4 --rcfile=setup.cfg tests myapp setup.py
+    - black --skip-string-normalization --check tests myapp setup.py
+
+test:
+  stage: test
+  script:
+    - pytest -v tests
